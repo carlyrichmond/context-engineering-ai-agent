@@ -1,0 +1,34 @@
+{
+  "name": "travel-planner-ai-agent",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.9",
+    "@ai-sdk/react": "^2.0.60",
+    "@elastic/elasticsearch": "^9.1.1",
+    "ai": "^6.0.33",
+    "install": "^0.13.0",
+    "next": "^15.5.4",
+    "npm": "^11.6.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "showdown": "^2.1.0",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/showdown": "^2.0.6",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.7",
+    "typescript": "^5"
+  }
+}
