@@ -1,0 +1,4 @@
+OPENAI_API_KEY=ARandomOpenAIKey?
+WEATHER_API_KEY=MyWeatherKey!
+ELASTIC_ENDPOINT=https://my-random-elastic-deployment:123
+ELASTIC_API_KEY=ARandomKey!
