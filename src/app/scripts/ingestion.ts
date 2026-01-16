@@ -1,5 +1,5 @@
-import { Client } from '@elastic/elasticsearch';
-import { Flight, Location } from '../model/flight.model';
+import { Client } from "@elastic/elasticsearch";
+import { Flight, Location } from "../model/flight.model";
 
 const index: string = "upcoming-flight-data";
 const client: Client = new Client({
@@ -56,7 +56,7 @@ async function addFlightsToIndex() {
     "Warsaw",
   ];
 
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 100; i++) {
     const startDate = new Date();
     const endDate = new Date(2028, 1, 1);
     const departureDate = new Date(
@@ -79,9 +79,33 @@ async function addFlightsToIndex() {
       document: flight,
     });
 
-    console.log(`Document ${i} indexed`);
+    await addReturnFlightstoIndex(flight, 3);
+    await addReturnFlightstoIndex(flight, 5);
+    await addReturnFlightstoIndex(flight, 7);
+
+    console.log(`Trip ${i} indexed`);
   }
 }
 
-//createIndex();
+/**
+ * Add return flights to the index based on the outbound flight
+ * @param outboundFlight: outbound flight of the trip
+ * @param durationDays: duration in days of the trip
+ */
+async function addReturnFlightstoIndex(outboundFlight: Flight, durationDays: number) {
+  const returnDate = new Date(
+    outboundFlight.departure_date.getDate() + durationDays
+  );
+  const returnFlight: Flight = { ...outboundFlight };
+  returnFlight.origin = outboundFlight.destination;
+  returnFlight.destination = outboundFlight.origin;
+  returnFlight.departure_date = returnDate;
+
+  await client.index({
+      index: index,
+      document: returnFlight,
+    });
+}
+
+createIndex();
 addFlightsToIndex();
