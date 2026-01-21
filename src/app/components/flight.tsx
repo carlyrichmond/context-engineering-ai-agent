@@ -30,7 +30,7 @@ export const Flights = (props: FlightProps) => {
           <h4>Inbound Flights</h4>
           { !props.inbound && <p>No return flights available</p> }
             <div className="flights__detail">
-              <p>{props.outbound?.flight_number} on {new Date(props.inbound?.departure_date).toLocaleDateString()}: £{priceWithCommas(props.inbound?.price)}</p>
+              <p>{props.inbound?.flight_number} on {new Date(props.inbound?.departure_date).toLocaleDateString()}: £{priceWithCommas(props.inbound?.price)}</p>
             </div>
         </div>
     </div>

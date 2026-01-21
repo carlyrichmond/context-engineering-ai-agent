@@ -8,21 +8,6 @@ export type Flight = {
   price: number;
 };
 
-export type Location =
-  | "London"
-  | "Glasgow"
-  | "Berlin"
-  | "Munich"
-  | "Dublin"
-  | "Barcelona"
-  | "Paris"
-  | "Mauritius"
-  | "Iran"
-  | "Madrid"
-  | "New York"
-  | "Las Vegas"
-  | "Seattle"
-  | "Prague"
-  | "Sao Paulo"
-  | "Sydney"
-  | "Warsaw";
+export const locations = ["London", "Glasgow", "Berlin", "Munich", "Dublin", "Barcelona", "Paris", "Mauritius",
+   "Amsterdam", "Iran", "Madrid", "New York", "Las Vegas", "Seattle", "Prague", "Sao Paulo", "Sydney", "Warsaw"] as const;
+export type Location = typeof locations[number];
