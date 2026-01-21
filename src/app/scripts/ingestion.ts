@@ -57,7 +57,7 @@ async function addFlightsToIndex() {
   ];
 
   for (let i = 0; i < 100; i++) {
-    const startDate = new Date();
+    const startDate = new Date(2026, 1, 1);
     const endDate = new Date(2028, 1, 1);
     const departureDate = new Date(
       startDate.getTime() +
@@ -93,9 +93,9 @@ async function addFlightsToIndex() {
  * @param durationDays: duration in days of the trip
  */
 async function addReturnFlightstoIndex(outboundFlight: Flight, durationDays: number) {
-  const returnDate = new Date(
-    outboundFlight.departure_date.getDate() + durationDays
-  );
+  const returnDate = new Date();
+  returnDate.setDate(outboundFlight.departure_date.getDate() + durationDays);
+
   const returnFlight: Flight = { ...outboundFlight };
   returnFlight.origin = outboundFlight.destination;
   returnFlight.destination = outboundFlight.origin;
