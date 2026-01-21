@@ -4,71 +4,54 @@ import {
   streamText,
   stepCountIs,
   convertToModelMessages,
-  ModelMessage
+  ModelMessage,
 } from "ai";
 import { NextResponse } from "next/server";
 
-import { weatherTool } from "@/app/ai/weather.tool";
-import { fcdoTool } from "@/app/ai/fcdo.tool";
-import { flightTool } from "@/app/ai/flights.tool";
-
-import { getSimilarMessages, persistMessage } from "@/app/util/elasticsearch";
+import {
+  getFlights,
+  persistMessage,
+} from "@/app/util/elasticsearch";
 import { summarizeMessage } from "@/app/util/context";
+import { formatFlight } from "@/app/model/flight.model";
 
 // Allow streaming responses up to 30 seconds to address typically longer responses from LLMs
 export const maxDuration = 30;
 
-const tools = {
-  flights: flightTool,
-  weather: weatherTool,
-  fcdo: fcdoTool
-};
-
 const azure = createAzure({
   resourceName: process.env.AZURE_OPENAI_RESOURCE_NAME,
-  apiKey: process.env.AZURE_OPENAI_API_KEY
+  apiKey: process.env.AZURE_OPENAI_API_KEY,
 });
 
 // Post request handler
 export async function POST(req: Request) {
   const { messages, id } = await req.json();
-
-  // Get chat history by chat id
-  const lastMessageIndex = messages.length > 0 ? messages.length - 1 : 0;
-  const messageContent = messages[lastMessageIndex].parts
-    .map((part: { text: string }) =>
-      "text" in part && typeof part.text === "string" ? part.text : ""
-    )
-    .join(" ");
-
-  const previousMessages = await getSimilarMessages(messageContent);
-
   try {
     const convertedMessages = await convertToModelMessages(messages);
-    const allMessages: ModelMessage[] =
-      previousMessages.concat(convertedMessages);
+
+    // Get flight information, assuming prompt starts with destination (not ideal)
+    const destination = messages[0].parts[0].text.split(" ")[0];
+    const flights = await getFlights(destination);
+
+    let prompt = `You are a helpful assistant that returns travel itineraries based on location, 
+        the FCDO guidance from the UK government, and the weather around that the specified 
+        time of year (if provided). Return an itinerary of sites to see and things to do 
+        based on the weather. 
+        If the FCDO warns against travel DO NOT generate an itinerary.`;
+
+    if (flights.outbound.length > 0 && flights.inbound.length > 0) {
+      prompt = `${prompt}
+          Include the following flight options: 
+          outbound: ${formatFlight(flights.outbound[0])}
+          inbound: ${formatFlight(flights.inbound[0])}`;
+    }
 
     const result = await streamText({
       //model: azure("gpt-4o"),
       model: ollama("qwen3:8b"),
-      system: `You are a helpful assistant that returns travel itineraries based on location, 
-      the FCDO guidance from the specified tool, the available flights from the flight tool (default origin airport is London), 
-      and the weather captured from the weather tool. 
-      
-      Use the flight information from the flight tool only to recommend possible flights in the itinerary.
-      You must also return a day-by-day textual itinerary of sites to see and things to do based on the weather result.
-      Reuse and adapt past itineraries for the same destination if one exists in your memory.
-      If the FCDO tool warns against travel DO NOT generate recommendations of things to do, and explain why.`,
-      messages: allMessages,
-      stopWhen: stepCountIs(2),
-      tools,
-      onFinish: async ({ text }) => {
-        if (text.length > 5) {
-          const summary = await summarizeMessage(text);
-          const finalMessage = { role: "system", content: summary } as ModelMessage;
-          await persistMessage(finalMessage, id);
-        }
-      },
+      system: prompt,
+      messages: convertedMessages,
+      stopWhen: stepCountIs(2)
     });
 
     // Return data stream to allow the useChat hook to handle the results as they are streamed through for a better user experience
