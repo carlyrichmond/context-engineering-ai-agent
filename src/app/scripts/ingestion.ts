@@ -1,5 +1,5 @@
 import { Client } from "@elastic/elasticsearch";
-import { Flight, Location } from "../model/flight.model";
+import { Flight, locations } from "../model/flight.model";
 
 const index: string = "upcoming-flight-data";
 const client: Client = new Client({
@@ -36,26 +36,6 @@ async function createIndex() {
 
 async function addFlightsToIndex() {
   // Generate random flight data and index the documents
-  const locations: Location[] = [
-    "London",
-    "Glasgow",
-    "Berlin",
-    "Munich",
-    "Dublin",
-    "Barcelona",
-    "Paris",
-    "Mauritius",
-    "Iran",
-    "Madrid",
-    "New York",
-    "Las Vegas",
-    "Seattle",
-    "Prague",
-    "Sao Paulo",
-    "Sydney",
-    "Warsaw",
-  ];
-
   for (let i = 0; i < 100; i++) {
     const startDate = new Date(2026, 1, 1);
     const endDate = new Date(2028, 1, 1);
@@ -107,5 +87,5 @@ async function addReturnFlightstoIndex(outboundFlight: Flight, durationDays: num
     });
 }
 
-createIndex();
+//createIndex();
 addFlightsToIndex();
