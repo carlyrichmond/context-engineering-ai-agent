@@ -11,7 +11,6 @@ export type WeatherProps = {
 
 
   export const Weather = (props: WeatherProps) => {
-    console.log(`Weather props: ${JSON.stringify(props)}`);
     const conditionImageURL: string = `https:${props.condition_image}`;
     return (
       <div className="weather__summary__container">
