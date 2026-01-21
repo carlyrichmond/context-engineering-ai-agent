@@ -188,8 +188,7 @@ export default function Chat() {
             <button
               id="retry__button"
               type="button"
-              onClick={() => sendMessage({ text: lastRequest })}
-            >
+              onClick={() => sendMessage({ text: lastRequest })}>
               Retry
             </button>
           </>

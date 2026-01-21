@@ -59,9 +59,6 @@ export async function POST(req: Request) {
       You must also return a day-by-day textual itinerary of sites to see and things to do based on the weather result.
       Reuse and adapt past itineraries for the same destination if one exists in your memory.
       If the FCDO tool warns against travel DO NOT generate recommendations of things to do, and explain why.`,
-
-      //If the user requests to book a trip trigger the booking tool to offer to book the trip along with the itinerary generation. 
-      //Proceed with the booking if they approve.`,
       messages: allMessages,
       stopWhen: stepCountIs(2),
       tools,
