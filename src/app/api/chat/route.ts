@@ -49,8 +49,8 @@ export async function POST(req: Request) {
       previousMessages.concat(convertedMessages);
 
     const result = await streamText({
-      //model: azure("gpt-4o"),
-      model: ollama("qwen3:8b"),
+      model: azure("gpt-4o"),
+      //model: ollama("qwen3:8b"),
       system: `You are a helpful assistant that returns travel itineraries based on location, 
       the FCDO guidance from the specified tool, the available flights from the flight tool (default origin airport is London), 
       and the weather captured from the weather tool. 

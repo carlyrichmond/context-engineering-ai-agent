@@ -197,8 +197,7 @@ export default function Chat() {
       <form
         onSubmit={(event) => {
           sendUserChat(event);
-        }}
-      >
+        }}>
         <input
           className="search-box__input"
           value={input}
