@@ -27,7 +27,7 @@ npm -v
 
 4. Create an account and API key for the [Weather API](https://www.weatherapi.com/). Optionally, you can substitute your own weather data in [`weatherTool`](./src/app/ai/weather.tool.ts).
 
-5. Additionally, if you wish to run the structured output example exposed via the `/api/itinerary` endpoint, install [Ollama](https://ollama.com/) and pull the [`qwen3:8b` model](https://ollama.com/library/qwen3) locally.
+5. Install [Ollama](https://ollama.com/) and pull the [`qwen3:8b` model](https://ollama.com/library/qwen3) locally.
 
 ## Install & Run
 
