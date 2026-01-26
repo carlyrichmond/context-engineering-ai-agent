@@ -50,6 +50,7 @@ async function pruneMessagesByDate() {
   // Delete messages older than 2 weeks
   const response = await client.deleteByQuery({
     index: index,
+    refresh: true,
     query: {
       range: {
         "@timestamp": {
