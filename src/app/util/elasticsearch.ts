@@ -84,13 +84,7 @@ export async function getSimilarMessages(content: string): Promise<ModelMessage[
                   boost: 1,
                 },
               },
-            },
-            {
-              semantic: {
-                field: "message.content",
-                query: content
-              },
-            },
+            }
           ],
         },
       },
