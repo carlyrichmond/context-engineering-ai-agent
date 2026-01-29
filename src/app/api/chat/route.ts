@@ -47,8 +47,8 @@ export async function POST(req: Request) {
     }
 
     const result = await streamText({
-      //model: azure("gpt-4o"),
-      model: ollama("qwen3:8b"),
+      model: azure("gpt-4o"),
+      //model: ollama("qwen3:8b"),
       system: prompt,
       messages: convertedMessages,
       stopWhen: stepCountIs(2)
