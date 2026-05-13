@@ -88,3 +88,4 @@ curl --header "Content-Type: application/json" \
  11. [RAG-MCP: Mitigating Prompt Bloat in LLM Tool Selection via Retrieval-Augmented Generation | Gan and Sun](https://arxiv.org/pdf/2505.03275)
  12. [Why Language Models Hallucinate | OpenAI](https://cdn.openai.com/pdf/d04913be-3f6f-4d2b-b283-ff432ef4aaa5/why-language-models-hallucinate.pdf)
  13. [Workshop: Agentic Search for Context Engineering | Leoni Monigatti](https://github.com/iamleonie/workshop-agentic-search/tree/main)
+ 14. [Most Agent Skills Fail. Here's How to Write Ones That Don't. | JP Hwang](https://www.youtube.com/watch?v=bvPILiinw2E)
