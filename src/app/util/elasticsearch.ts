@@ -27,7 +27,10 @@ async function createMessagesIndexIfNotExists() {
             type: "object",
             properties: {
               role: { type: "keyword" },
-              content: { type: "semantic_text", inference_id: ".elser-2-elasticsearch" },
+              content: {
+                type: "semantic_text",
+                inference_id: ".elser-2-elasticsearch",
+              },
             },
           },
           "@timestamp": { type: "date" },
@@ -64,7 +67,9 @@ export async function persistMessage(message: ModelMessage, id: string) {
  * @param content: current message content
  * @returns
  */
-export async function getSimilarMessages(content: string): Promise<ModelMessage[]> {
+export async function getSimilarMessages(
+  content: string,
+): Promise<ModelMessage[]> {
   if (!(await client.indices.exists({ index: messageIndex }))) {
     return [];
   }
@@ -75,17 +80,10 @@ export async function getSimilarMessages(content: string): Promise<ModelMessage[
     const result = await client.search<{ message: ModelMessage }>({
       index: messageIndex,
       query: {
-        bool: {
-          should: [
-            {
-              match: {
-                "message.content": {
-                  query: location,
-                  boost: 1,
-                },
-              },
-            }
-          ],
+        match: {
+          "message.content": {
+            query: location
+          },
         },
       },
       sort: [{ "@timestamp": "asc" }],
@@ -101,16 +99,18 @@ export async function getSimilarMessages(content: string): Promise<ModelMessage[
 
 /**
  * Find the location mentioned in the message content
- * @param messageContent 
- * @returns 
+ * @param messageContent
+ * @returns
  */
 function findLocationInMessage(messageContent: string): string {
-    for (const location of locations) {
-        if (messageContent.toLowerCase().includes(location.toLowerCase()) 
-        && !messageContent.toLowerCase().includes(`from ${location.toLowerCase()}`)) {
-            return location;
-        }
+  for (const location of locations) {
+    if (
+      messageContent.toLowerCase().includes(location.toLowerCase()) &&
+      !messageContent.toLowerCase().includes(`from ${location.toLowerCase()}`)
+    ) {
+      return location;
     }
+  }
 
-    return "";
+  return "";
 }
