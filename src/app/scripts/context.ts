@@ -27,7 +27,7 @@ async function generateOldMessages() {
 
   // Index new messages with old timestamp
   for (const hit of messageResponse.hits.hits) {
-    const newMessage = { ...hit._source };
+    const newMessage: Record<string, unknown> = { ...(hit._source as Record<string, unknown> ?? {}) };
     newMessage["@timestamp"] = oldTimestamp.toISOString();
 
     await client.index({

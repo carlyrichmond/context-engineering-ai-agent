@@ -2,35 +2,36 @@
   "name": "travel-planner-ai-agent",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@ai-sdk/azure": "^3.0.13",
-    "@ai-sdk/openai": "^3.0.9",
-    "@ai-sdk/react": "^3.0.45",
-    "@elastic/elasticsearch": "^9.1.1",
-    "ai": "^6.0.33",
-    "ai-sdk-ollama": "^3.1.1",
-    "install": "^0.13.0",
-    "next": "^15.5.4",
-    "npm": "^11.6.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@ai-sdk/azure": "^4.0.35",
+    "@ai-sdk/openai": "^4.0.34",
+    "@ai-sdk/react": "^4.0.59",
+    "@elastic/elasticsearch": "^9.5.0",
+    "ai": "^7.0.56",
+    "ai-sdk-ollama": "^4.1.0",
+    "next": "^16.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "showdown": "^2.1.0",
-    "zod": "^4.1.11"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "@types/showdown": "^2.0.6",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.7",
-    "typescript": "^5"
+    "eslint": "^10.8.0",
+    "eslint-config-next": "^16.3.0",
+    "typescript": "^5.9.3"
   }
 }

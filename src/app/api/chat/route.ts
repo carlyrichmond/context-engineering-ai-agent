@@ -2,9 +2,11 @@ import { createAzure } from "@ai-sdk/azure";
 import { ollama } from "ai-sdk-ollama";
 import {
   streamText,
-  stepCountIs,
+  isStepCount,
   convertToModelMessages,
-  ModelMessage
+  ModelMessage,
+  toUIMessageStream,
+  createUIMessageStreamResponse,
 } from "ai";
 import { NextResponse } from "next/server";
 
@@ -48,31 +50,31 @@ export async function POST(req: Request) {
     const allMessages: ModelMessage[] =
       previousMessages.concat(convertedMessages);
 
-    const result = await streamText({
+    const result = streamText({
       model: azure("gpt-4o"),
       //model: ollama("qwen3:8b"),
-      system: `You are a helpful assistant that returns travel itineraries based on location, 
-      the FCDO guidance from the specified tool, the available flights from the flight tool (default origin airport is London), 
-      and the weather captured from the weather tool. 
-      
+      instructions: `You are a helpful assistant that returns travel itineraries based on location,
+      the FCDO guidance from the specified tool, the available flights from the flight tool (default origin airport is London),
+      and the weather captured from the weather tool.
+
       Use the flight information from the flight tool only to recommend possible flights in the itinerary.
       You must also return a day-by-day textual itinerary of sites to see and things to do based on the weather result.
       Reuse and adapt past itineraries for the same destination if one exists in your memory.
       If the FCDO tool warns against travel DO NOT generate recommendations of things to do, and explain why.`,
       messages: allMessages,
-      stopWhen: stepCountIs(2),
+      stopWhen: isStepCount(2),
       tools,
-      onFinish: async ({ text }) => {
+      onEnd: async ({ text }) => {
         if (text.length > 5) {
           const summary = await summarizeMessage(text);
-          const finalMessage = { role: "system", content: summary } as ModelMessage;
+          const finalMessage = { role: "assistant", content: summary } as ModelMessage;
           await persistMessage(finalMessage, id);
         }
       },
     });
 
     // Return data stream to allow the useChat hook to handle the results as they are streamed through for a better user experience
-    return result.toUIMessageStreamResponse();
+    return createUIMessageStreamResponse({ stream: toUIMessageStream(result) });
   } catch (e) {
     console.error(e);
     return new NextResponse(

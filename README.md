@@ -19,7 +19,7 @@ node -v
 npm -v
 ```
 
-*Please ensure that you are running Node v20.13.1 or higher*
+*Please ensure that you are running Node v22 or higher (required by AI SDK 7)*
 
 2. Create an Elasticsearch deployment via [one of these options](https://www.elastic.co/docs/deploy-manage).
    
@@ -62,6 +62,7 @@ Initialize and start the application:
 ```zsh
 npm install # key dependencies: ai @ai-sdk/azure ai-sdk-ollama zod @elastic/elasticsearch
 npm run dev
+# To lint: npm run lint (calls `eslint .` — `next lint` was removed in Next.js 16)
 ```
 
 Additionally you can run the structured output example via the following cURL command:
