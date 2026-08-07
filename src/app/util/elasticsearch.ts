@@ -90,7 +90,15 @@ export async function getSimilarMessages(
       size: 20,
     });
 
-    return result.hits.hits.map((hit) => hit._source?.message as ModelMessage);
+    // Coerce to "assistant" regardless of stored role.
+    // v7 rejects system-role messages inside the messages array by default, and stored
+    // memories are summaries of assistant replies anyway, so this role is semantically
+    // correct. It also ensures pre-upgrade documents (stored with role "system") keep
+    // working without a reindex.
+    return result.hits.hits.map((hit) => ({
+      ...hit._source?.message,
+      role: "assistant",
+    }) as ModelMessage);
   } catch (e) {
     console.error("Unable to retrieve messages", e);
     return [];
